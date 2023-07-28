@@ -25,7 +25,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Lancement du serveur en prod
-ENTRYPOINT ["node", "dist/index.js"]
+ENTRYPOINT ["node", "server.js"]
 
 # docker build -f Dockerfile -t  exercice1prod .
 # Lien repo : https://hub.docker.com/repositories/basileregnault
