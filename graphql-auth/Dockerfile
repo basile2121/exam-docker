@@ -20,8 +20,6 @@ FROM node:20-alpine
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 
-ENTRYPOINT ["./realtime-client"]
-
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -30,4 +28,5 @@ ENV NODE_ENV=production
 ENTRYPOINT ["node", "dist/index.js"]
 
 # docker build -f Dockerfile -t  exercice1prod .
+# Lien repo : https://hub.docker.com/repositories/basileregnault
 
