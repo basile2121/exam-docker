@@ -1,0 +1,49 @@
+# docker-compose up -d
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb
+    environment:
+      MARIA_ROOT_PASSWORD: ${MARIA_ROOT_PASSWORD}
+      MARIA_DATABASE: ${MARIA_DATABASE}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MARIA_ROOT_PASSWORD}" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  graphql-dev:
+    build:
+      context: .
+      dockerfile: DockerfileDev
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3000:${PORT}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.pnpm-store
+    depends_on:
+      - mariadb
+
+  graphql-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3000:${PORT}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.pnpm-store
+    depends_on:
+      - mariadb
+

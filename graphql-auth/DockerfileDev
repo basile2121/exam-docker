@@ -1,0 +1,17 @@
+FROM node:20
+
+WORKDIR /app
+
+COPY ["package.json", "pnpm-lock.yaml", "/app/"]
+
+RUN npm install -g pnpm && pnpm install && pnpm install prisma
+
+COPY . .
+
+RUN pnpm prisma generate && pnpm prisma migrate
+
+# Lancement du serveur en dev
+CMD ["pnpm", "run", "dev"]
+
+# Build : docker build -f DockerfileDev -t  exercice1dev .
+# Run : docker run -it exercice1dev
